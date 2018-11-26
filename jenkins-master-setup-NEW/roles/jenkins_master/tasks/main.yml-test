@@ -1,0 +1,151 @@
+- include_vars: ../jenkins_master/defaults/my_var.yml
+
+#IMP Verify latest LTS repo url from https://pkg.jenkins.io/redhat/
+- name: Copying Jenkins LTS repo
+  get_url:
+     url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+     dest: /etc/yum.repos.d/
+
+#IMP Verify latest gpg key url from https://pkg.jenkins.io/redhat/ 
+- name: Adding the repository gpg keys
+  rpm_key:
+     key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+     #key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+     state: present
+
+## Configure Jenkins master
+- name: Stop jenkins Master Service
+  service:
+    name: jenkins
+    state: stopped
+  ignore_errors: yes
+
+- name:  Checking jenkins master version
+  shell: "rpm -q jenkins-{{jenkins_version}}"
+  register: result1
+  ignore_errors: yes
+
+- name: Remove jenkins version
+  yum:
+    name: "jenkins"
+    state: absent
+  register: result2
+  when:
+        - result1.rc == 1
+  #when: (result1.find('not installed') != -1)
+
+- name: Remove previous jenkins home data
+  file: 
+    path: "/var/lib/jenkins"
+    state: absent
+  when: ( result1.rc == 1 )
+#  when:
+#        - result2.rc == 0
+
+- name: Installing Jenkins Entered TLS stable Veriosn
+  yum:
+    name: "jenkins-{{jenkins_version}}"
+    state: present
+  when: ( result1.rc == 1 )
+
+
+- name: Assigning shell to jenkins user
+  user:
+    name: jenkins
+    shell: /bin/bash
+
+- name: Copying Jenkins Skell file in jenkins users home dir
+  shell: "cp /etc/skel/.bash* /var/lib/jenkins"
+
+- file:
+    path: "{{ jenkins_home }}/.ssh"
+    mode: 0700
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- file:
+    path: "{{ jenkins_home }}/plugins"
+    mode: 0755
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- name: Add user Public Key
+  copy: 
+     src: "../jenkins_master/files/jenkins_id_rsa.pub"
+     dest: "{{ jenkins_home }}/.ssh/id_rsa.pub"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+#  when: ( result1.rc == 1 )
+
+- name: Add user Private Key
+  copy: 
+     src: "../jenkins_master/files/jenkins_id_rsa"
+     dest: "{{ jenkins_home }}/.ssh/id_rsa"
+     mode: 0600
+     owner: "{{ username }}"
+     group: "{{ username }}"
+#  when: ( result1.rc == 1 )
+
+- name: Adding Bitbucket Public Key
+  copy: 
+     src: "../jenkins_master/files/bitbucket_pub"
+     dest: "{{ jenkins_home }}/.ssh/known_hosts"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+  when: ( result1.rc == 1 )
+
+
+- name: git config user name
+  shell: git config --global user.name "{{ git_name }}" executable=/bin/bash
+  become: yes
+  become_user: "{{ username }}"
+
+- name: git config user email
+  shell: git config --global user.email "{{ git_email }}" executable=/bin/bash
+  become: yes
+  become_user: "{{ username }}"
+
+- name: sleep for 30 seconds and continue with play
+  wait_for: timeout=30
+  delegate_to: localhost
+
+- name: Pull Jenkins Configuration from bitbuket
+  git:
+    repo: "{{ jenkins_bucket_url }}"
+    dest: "{{ jenkins_bucket }}"
+    accept_hostkey: yes
+    force: yes
+  become: yes
+  become_user: "{{ username }}"
+
+- name: copying jobs and plugin from repo to jenkins home
+  #shell: "cp -frv {{ jenkins_bucket }}/* /var/lib/jenkins/ ; chown  jenkins.jenkins -R /var/lib/jenkins/"
+  shell: "cp -frv {{ jenkins_bucket }}/* /var/lib/jenkins/ ; cp -frv /tmp/jenkins-plugin-2.73.3/* {{  jenkins_home }}/plugins ;chown  jenkins.jenkins -R /var/lib/jenkins/"
+
+#- name: Removing Old plugins if Jenkins version changed
+- name: "Will Updated new plugins if Jenkins Version NOT changed - {{jenkins_plug_url}}"
+  shell: "cd {{  jenkins_home }}/plugins;for i in {{item}};do if [ -f ${i} ];then echo ;else wget {{jenkins_plug_url}}/$i;fi;done"
+  with_items: "{{ jenkins_plugins }}"
+  when: ( result1.rc == 0 )
+  ignore_errors: yes
+
+### // Add plugin name here my_var.yml to install on jenkins // ###
+- name: "Get other New plugins from Internet if Jenkins Version changed - JenkinsVersion: {{jenkins_version}}"
+  get_url: 
+   url: "{{jenkins_plug_url}}/{{item}}"
+   dest: "{{  jenkins_home }}/plugins"
+  with_items: "{{ jenkins_plugins }}"
+  when: ( result1.rc == 1 )
+
+- name: Chaning User and Group Owner "{{ username }}"
+  shell: "chown  jenkins.jenkins -R /var/lib/jenkins/"
+
+- name: Start and Enabled jenkins Master Service
+  service:
+    name: jenkins
+    #state: started
+    enabled: yes

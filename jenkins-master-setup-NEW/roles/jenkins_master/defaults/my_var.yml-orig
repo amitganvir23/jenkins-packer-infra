@@ -1,0 +1,219 @@
+## TLS stable version and thir Plugins
+##Verify RPM version from URL https://pkg.jenkins.io/redhat-stable/
+jenkins_version: "2.73.3"
+jenkins_plug_url: "https://updates.jenkins-ci.org/stable-2.73/latest"
+##jenkins_plug_url: https://updates.jenkins-ci.org/latest # latest update plugins
+
+jenkins_home: /var/lib/jenkins
+jenkins_url: "http://127.0.0.1"
+jenkins_port: "8080"
+
+jenkins_java_opts: "-Djenkins.install.runSetupWizard=false"
+
+git_name: "JenkinsMaster"
+git_email: "JenkinsMaster@gmail.com"
+
+#jenkins_bucket: "/root/jenkins-config-bucket"
+jenkins_bucket: "/tmp/jenkins-config-bucket-1"
+jenkins_bucket_url: "ssh://git@bitbucket.gmail.com/gltin/glt-scm-sync-jenkins-data-devops.git"
+
+#jenkins_bucket: "/tmp/jenkins-config-bucket" #old bucket dir
+#jenkins_bucket_url: "ssh://git@bitbucket.gmail.com/gltin/glt-jenkins-config-devops.git" #old url
+
+jenkins_plugin_bucket_url: "ssh://git@bitbucket.gmail.com/gltin/glt-infra-packer-old.git"
+jenkins_plugin_bucket: "/tmp/jenkins-plugin-bucket"
+
+## user name who is owner of jinkins home
+username: "jenkins"
+
+## // plgin name Nov-2017
+jenkins_plugins:
+ #- environment-operator-deployer.hpi
+ - ace-editor.hpi
+ - amazon-ecr.hpi
+ - amazon-ecs.hpi
+ - analysis-collector.hpi
+ - ansible.hpi
+ - antisamy-markup-formatter.hpi
+ - ant.hpi
+ - artifactory.hpi
+ - authentication-tokens.hpi
+ - aws-credentials.hpi
+ - aws-java-sdk.hpi
+ - aws-lambda.hpi
+ - bitbucket-build-status-notifier.hpi
+ - bitbucket.hpi
+ - blueocean-autofavorite.hpi
+ - blueocean-commons.hpi
+ - blueocean-config.hpi
+ - blueocean-dashboard.hpi
+ - blueocean-display-url.hpi
+ - blueocean-events.hpi
+ - blueocean-github-pipeline.hpi
+ - blueocean-git-pipeline.hpi
+ - blueocean-i18n.hpi
+ - blueocean.hpi
+ - blueocean-jwt.hpi
+ - blueocean-personalization.hpi
+ - blueocean-pipeline-api-impl.hpi
+ - blueocean-pipeline-editor.hpi
+ - blueocean-pipeline-scm-api.hpi
+ - blueocean-rest-impl.hpi
+ - blueocean-rest.hpi
+ - blueocean-web.hpi
+ - bouncycastle-api.hpi
+ - branch-api.hpi
+ - build-metrics.hpi
+ - build-name-setter.hpi
+ - build-timeout.hpi
+ - build-token-root.hpi
+ - checkmarx.hpi
+ - checkstyle.hpi
+ - chromedriver.hpi
+ - codefresh.hpi
+ - copyartifact.hpi
+ - crowd2.hpi
+ - crowd.hpi
+ - cucumber-slack-notifier.hpi
+ - cvs.hpi
+ - dashboard-view.hpi
+ - delivery-pipeline-plugin.hpi
+ - description-setter.hpi
+ - docker-build-publish.hpi
+ - docker-build-step.hpi
+ - docker-custom-build-environment.hpi
+ - docker-plugin.hpi
+ - docker-slaves.hpi
+ - docker-traceability.hpi
+ - ec2-fleet.hpi
+ - ec2.hpi
+ - environment-dashboard.hpi
+ - external-monitor-job.hpi
+ - favorite.hpi
+ - github-organization-folder.hpi
+ - git-server.hpi
+ - global-build-stats.hpi
+ - google-container-registry-auth.hpi
+ - google-oauth-plugin.hpi
+ - handlebars.hpi
+ - hipchat.hpi
+ - htmlpublisher.hpi
+ - icon-shim.hpi
+ - jackson2-api.hpi
+ - javadoc.hpi
+ - JDK_Parameter_Plugin.hpi
+ - jenkinsci-appspider-plugin.hpi
+ - jquery-detached.hpi
+ - jquery.hpi
+ - junit.hpi
+ - kubernetes.hpi
+ - ldap.hpi
+ - mapdb-api.hpi
+ - metrics.hpi
+ - momentjs.hpi
+ - multiple-scms.hpi
+ - nexus-artifact-uploader.hpi
+ - nexus-jenkins-plugin.hpi
+ - node-iterator-api.hpi
+ - oauth-credentials.hpi
+ - openshift-client.hpi
+ - openshift-deployer.hpi
+ - openshift-login.hpi
+ - openshift-pipeline.hpi
+ - openshift-sync.hpi
+ - pam-auth.hpi
+ - parameterized-scheduler.hpi
+ - parameter-pool.hpi
+ - pipeline-github-lib.hpi
+ - pipeline-stage-step.hpi
+ - plain-credentials.hpi
+ - publish-over-ssh.hpi
+ - pubsub-light.hpi
+ - rebuild.hpi
+ - resource-disposer.hpi
+ - run-condition.hpi
+ - sauce-ondemand.hpi
+ - scalable-amazon-ecs.hpi
+ - scm-sync-configuration.hpi
+ - seed.hpi
+ - selenium-builder.hpi
+ - sse-gateway.hpi
+ - ssh-credentials.hpi
+ - stashNotifier.hpi
+ - stash-pullrequest-builder.hpi
+ - terraform.hpi
+ - timestamper.hpi
+ - variant.hpi
+ - windows-slaves.hpi
+ - workflow-api.hpi
+ - workflow-cps.hpi
+ - analysis-core.hpi
+ - cloudbees-folder.hpi
+ - codesonar.hpi
+ - conditional-buildstep.hpi
+ - config-file-provider.hpi
+ - credentials-binding.hpi
+ - credentials.hpi
+ - crossbrowsertesting.hpi
+ - display-url-api.hpi
+ - docker-commons.hpi
+ - docker-workflow.hpi
+ - durable-task.hpi
+ - email-ext.hpi
+ - emailext-template.hpi
+ - envinject-api.hpi
+ - envinject.hpi
+ - findbugs.hpi
+ - git-client.hpi
+ - git.hpi
+ - github-api.hpi
+ - github-branch-source.hpi
+ - github.hpi
+ - gradle.hpi
+ - ivy.hpi
+ - job-dsl.hpi
+ - mailer.hpi
+ - matrix-auth.hpi
+ - matrix-project.hpi
+ - maven-invoker-plugin.hpi
+ - maven-plugin.hpi
+ - mercurial.hpi
+ - parameterized-trigger.hpi
+ - pipeline-build-step.hpi
+ - pipeline-graph-analysis.hpi
+ - pipeline-input-step.hpi
+ - pipeline-milestone-step.hpi
+ - pipeline-model-api.hpi
+ - pipeline-model-declarative-agent.hpi
+ - pipeline-model-definition.hpi
+ - pipeline-model-extensions.hpi
+ - pipeline-rest-api.hpi
+ - pipeline-stage-tags-metadata.hpi
+ - pipeline-stage-view.hpi
+ - pollscm.hpi
+ - role-strategy.hpi
+ - scm-api.hpi
+ - script-security.hpi
+ - sonar.hpi
+ - ssh-slaves.hpi
+ - structs.hpi
+ - subversion.hpi
+ - token-macro.hpi
+ - workflow-aggregator.hpi
+ - workflow-basic-steps.hpi
+ - workflow-cps-global-lib.hpi
+ - workflow-durable-task-step.hpi
+ - workflow-job.hpi
+ - workflow-multibranch.hpi
+ - workflow-scm-step.hpi
+ - workflow-step-api.hpi
+ - workflow-support.hpi
+ - ws-cleanup.hpi
+## dependency plugin
+ - jsch.hpi
+ - apache-httpcomponents-client-4-api.hpi
+ - cloudbees-bitbucket-branch-source.hpi
+ - blueocean-bitbucket-pipeline.hpi
+ - jira.hpi
+ - blueocean-jira.hpi
+ - docker-java-api.hpi

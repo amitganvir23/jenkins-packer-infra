@@ -1,0 +1,9 @@
+---
+#- hosts: 18.188.201.82
+- hosts: default
+  gather_facts: false
+  user: ec2-user
+  sudo: True
+
+  roles:
+        - jenkins_slave

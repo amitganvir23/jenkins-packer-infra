@@ -1,0 +1,30 @@
+{
+    "variables": {
+        "aws_access_key_id": "",
+        "aws_secret_access_key": ""
+    },
+    "builders": [
+    {
+        "type": "amazon-ebs",
+        "name": "jenkins-slave-AmazonLinux-packer2",
+        "instance_type": "t2.medium",
+        "ssh_username": "ec2-user",
+        "associate_public_ip_address": true,
+        "access_key": "{{user `aws_access_key_id`}}",
+        "secret_key": "{{user `aws_secret_access_key`}}",
+        "region": "us-east-2",
+        "source_ami": "ami-976152f2",
+        "ami_name": "jenkins-slave-2018-test"
+    }
+  ],
+
+
+  "provisioners": [{
+    "type": "ansible",
+    "playbook_file": "./jenkins-config.yml",
+    "user": "ec2-user",
+    "host_alias": "default",
+    "ansible_env_vars": ["ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'", "ANSIBLE_NOCOLOR=True"]
+  }]
+
+}

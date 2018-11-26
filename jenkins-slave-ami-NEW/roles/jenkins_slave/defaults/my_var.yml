@@ -1,0 +1,38 @@
+jenkins_home: /var/lib/jenkins
+jenkins_user_home: /home/jenkins
+
+jenkins_java_opts: "-Djenkins.install.runSetupWizard=false"
+
+git_name: "JenkinsMaster"
+git_email: "amit.ganvir@globallogic.com"
+
+## user name who is owner of jinkins home
+username: "jenkins"
+
+JAVA_HOME: /usr/java/jdk1.8.0_131
+JAVA_OPTIONS: -Xmx2048m
+
+## Update Maven Version Package, Home dir and Bin path
+Maven_Package: http://www.eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+M2_HOME: /home/jenkins/.m2/apache-maven-3.3.9
+M2_bin: /home/jenkins/.m2/apache-maven-3.3.9/bin
+
+AWS_SDK_LOAD_CONFIG: true
+
+## npm version
+#rpm version check here -> https://rpm.nodesource.com/pub_6.x/el/7/x86_64/
+#name of the npm repo shell script
+#nodejs6=setup_6.x
+#nodejs7=setup_7.x
+#nodejs8=setup_8.x
+#nodejs9=setup_9.x
+npm_repo_shell: "https://rpm.nodesource.com/setup_6.x"
+nodejs_version: "nodejs-6.10.1"
+
+##Downloading latest Kubectl binary file
+Kubectl_Package: "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+
+##Check Terraform version from https://releases.hashicorp.com/terraform/
+##Extract Terraform binary
+Terraform_Version: 0.9.8
+Terraform_Zip: "https://releases.hashicorp.com/terraform/{{Terraform_Version}}/terraform_{{Terraform_Version}}_linux_386.zip"
